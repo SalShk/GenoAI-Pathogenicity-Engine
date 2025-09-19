@@ -1,0 +1,1 @@
+from .analyser import run_genoai_analysis
