@@ -23,42 +23,44 @@ classifiers = [
 ]
 dependencies = [
   "click",
-  "mcp",      
+  "mcp",
   "fastapi",
   "uvicorn[standard]",
   "pandas",
   "numpy",
   "pydantic",
 ]
-optional-dependencies.dev = [
+
+[project.optional-dependencies]
+dev = [
   "pre-commit",
   "twine>=4.0.2",
 ]
-optional-dependencies.doc = [
+doc = [
   "docutils>=0.8,!=0.18.*,!=0.19.*",
   "ipykernel",
   "ipython",
   "myst-nb>=1.1",
   "pandas",
-  # Until pybtex >0.24.0 releases: https://bitbucket.org/pybtex-devs/pybtex/issues/169/
   "setuptools",
   "sphinx>=8.1",
   "sphinx-book-theme>=1",
   "sphinx-copybutton",
   "sphinx-tabs",
-  # "sphinxcontrib-bibtex>=1",
   "sphinxext-opengraph",
   "sphinx-autoapi",
 ]
-optional-dependencies.test = [
+test = [
   "coverage",
   "pytest",
   "pytest-asyncio",
 ]
-# https://docs.pypi.org/project_metadata/#project-urls
-urls.Documentation = "https://GenoAI Pathogenicity Engine.readthedocs.io/"
-urls.Homepage = "https://github.com/salshk/GenoAI Pathogenicity Engine"
-urls.Source = "https://github.com/salshk/GenoAI Pathogenicity Engine"
+
+[project.urls]
+# CORRECTED: Replaced spaces with hyphens for valid URLs
+Documentation = "https://GenoAI-Pathogenicity-Engine.readthedocs.io/"
+Homepage = "https://github.com/salshk/GenoAI-Pathogenicity-Engine"
+Source = "https://github.com/salshk/GenoAI-Pathogenicity-Engine"
 
 
 [tool.hatch.build.targets.wheel]
@@ -71,16 +73,15 @@ features = [ "dev" ]
 
 [tool.hatch.envs.docs]
 features = [ "doc" ]
-scripts.build = "sphinx-build -M html docs docs/_build -W {args}"
-scripts.open = "python -m webbrowser -t docs/_build/html/index.html"
-scripts.clean = "git clean -fdX -- {args:docs}"
+[tool.hatch.envs.docs.scripts]
+build = "sphinx-build -M html docs docs/_build -W {args}"
+open = "python -m webbrowser -t docs/_build/html/index.html"
+clean = "git clean -fdX -- {args:docs}"
 
-# Test the lowest and highest supported Python versions with normal deps
 [[tool.hatch.envs.hatch-test.matrix]]
 deps = [ "stable" ]
 python = [ "3.11", "3.13" ]
 
-# Test the newest supported Python version also with pre-release deps
 [[tool.hatch.envs.hatch-test.matrix]]
 deps = [ "pre" ]
 python = [ "3.13" ]
@@ -91,8 +92,6 @@ features = [ "test" ]
 run-cov = "pytest --cov"
 
 [tool.hatch.envs.hatch-test.overrides]
-# If the matrix variable `deps` is set to "pre",
-# set the environment variable `UV_PRERELEASE` to "allow".
 matrix.deps.env-vars = [
   { key = "UV_PRERELEASE", value = "allow", if = [ "pre" ] },
 ]
@@ -101,36 +100,14 @@ matrix.deps.env-vars = [
 line-length = 120
 src = [ "src" ]
 extend-include = [ "*.ipynb" ]
-
 format.docstring-code-format = true
-
 lint.select = [
-  "B",      # flake8-bugbear
-  "BLE",    # flake8-blind-except
-  "C4",     # flake8-comprehensions
-  "D",      # pydocstyle
-  "E",      # Error detected by Pycodestyle
-  "F",      # Errors detected by Pyflakes
-  "I",      # isort
-  "RUF100", # Report unused noqa directives
-  "TID",    # flake8-tidy-imports
-  "UP",     # pyupgrade
-  "W",      # Warning detected by Pycodestyle
+  "B", "BLE", "C4", "D", "E", "F", "I",
+  "RUF100", "TID", "UP", "W",
 ]
 lint.ignore = [
-  "B008", # Errors from function calls in argument defaults. These are fine when the result is immutable.
-  "D100", # Missing docstring in public module
-  "D104", # Missing docstring in public package
-  "D105", # __magic__ methods are often self-explanatory, allow missing docstrings
-  "D107", # Missing docstring in __init__
-  # Disable one in each pair of mutually incompatible rules
-  "D203", # We don’t want a blank line before a class docstring
-  "D213", # <> We want docstrings to start immediately after the opening triple quote
-  "D400", # first line should end with a period [Bug: doesn’t work with single-line docstrings]
-  "D401", # First line should be in imperative mood; try rephrasing
-  "E501", # line too long -> we accept long comment lines; formatter gets rid of long code lines
-  "E731", # Do not assign a lambda expression, use a def -> lambda expression assignments are convenient
-  "E741", # allow I, O, l as variable names -> I is the identity matrix
+  "B008", "D100", "D104", "D105", "D107",
+  "D203", "D213", "D400", "D401", "E501", "E731", "E741",
 ]
 lint.per-file-ignores."*/__init__.py" = [ "F401" ]
 lint.per-file-ignores."docs/*" = [ "I" ]
@@ -144,11 +121,12 @@ python_files = "test_*.py"
 python_functions = "test_*"
 xfail_strict = true
 addopts = [
-  "--import-mode=importlib", # allow using test files with same name
+  "--import-mode=importlib",
 ]
 
 [tool.coverage.run]
-source = [ "src/genoai pathogenicity engine" ]
+# CORRECTED: Replaced space with underscore for a valid Python path
+source = [ "src/genoai_pathogenicity_engine" ]
 omit = [
   "*/tests/test_*.py",
 ]
