@@ -23,7 +23,7 @@ classifiers = [
 ]
 dependencies = [
   "click",
-  "fastmcp",
+  "mcp",      
   "fastapi",
   "uvicorn[standard]",
   "pandas",

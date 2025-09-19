@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, HTTPException
 from typing import List
 
 from .mcp import get_mcp_manifest
@@ -30,5 +30,9 @@ async def mcp_endpoint():
 
 @app.post("/analyze/", summary="Run GenoAI Analysis")
 async def analyze_variants_endpoint(variants: List[dict] = Body(...)):
+    # CORRECTED: Handle the empty list case here in the web layer
+    if not variants:
+        raise HTTPException(status_code=422, detail="Input variant list cannot be empty.")
+    
     # The endpoint now simply calls your dedicated tool function
     return run_genoai_analysis(variants)

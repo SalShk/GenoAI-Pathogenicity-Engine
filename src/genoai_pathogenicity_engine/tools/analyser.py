@@ -1,12 +1,10 @@
-# src/genoai_pathogenicity_engine/tools/analyser.py
-
 from typing import List
 import pandas as pd
 import numpy as np
 import re
 
 from ..models import VariantInput
-from ..engine import analyze_variants
+from genoai_engine_private import analyze_variants
 
 ALIAS_MAP = {
     "variant_id": ["variant_id", "Location", "ID"],
@@ -48,18 +46,18 @@ def normalize_variant_data(raw_variants: List[dict]) -> List[dict]:
     return normalized_list
 
 def run_genoai_analysis(variants: List[dict]) -> List[dict]:
-    if not variants:
-        return {"error": "Input variant list cannot be empty."}
-
+    # CORRECTED: The check for an empty list is now removed from here.
+    
     normalized_data = normalize_variant_data(variants)
-
+    
     try:
         validated_variants = [VariantInput(**data) for data in normalized_data]
     except Exception as e:
         return {"error": f"Data validation error: {e}"}
 
-    input_df = pd.DataFrame([v.dict() for v in validated_variants])
-
+    # CORRECTED: Use .model_dump() instead of the deprecated .dict()
+    input_df = pd.DataFrame([v.model_dump() for v in validated_variants])
+    
     all_expected_columns = [
         'variant_id', 'Consequence', 'ZYG', 'IMPACT', 'gnomADe_AF', 'gnomADg_AF', 'AF', 'MAX_AF',
         'CLIN_SIG', 'clinvar_review', 'PUBMED', 'SIFT', 'PolyPhen', 'CADD_PHRED', 'REVEL', 'LoF', 
@@ -78,7 +76,7 @@ def run_genoai_analysis(variants: List[dict]) -> List[dict]:
         'SpliceVault_site_pos', 'SpliceVault_site_sample_count', 'SpliceVault_site_type', 
         'SpliceVault_top_events', 'CADD_RAW', 'GENE_PHENO', 'DOMAINS', 'GERP_RS', 'GERP__RS'
     ]
-
+    
     full_df = input_df.reindex(columns=all_expected_columns)
     results_df = analyze_variants(full_df)
 
