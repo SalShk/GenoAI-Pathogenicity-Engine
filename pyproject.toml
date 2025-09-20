@@ -9,64 +9,61 @@ description = "A clinical reasoning engine for variant pathogenicity."
 readme = "README.md"
 license = { file = "LICENSE" }
 maintainers = [
-  { name = "Dr Saleh Shekari", email = "salehshekari@gmail.com" },
+{ name = "Dr Saleh Shekari", email = "salehshekari@gmail.com" },
 ]
 authors = [
-  { name = "Dr Saleh Shekari" },
+{ name = "Dr Saleh Shekari" },
 ]
 requires-python = ">=3.11"
 classifiers = [
-  "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
+"Programming Language :: Python :: 3 :: Only",
+"Programming Language :: Python :: 3.11",
+"Programming Language :: Python :: 3.12",
+"Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-  "click",
-  "mcp",
-  "fastapi",
-  "uvicorn[standard]",
-  "pandas",
-  "numpy",
-  "pydantic",
-  "genoai-engine-private @ git+https://github.com/salshk/genoai-engine-private.git",
+"click",
+"mcp",
+"fastapi",
+"uvicorn[standard]",
+"pandas",
+"numpy",
+"pydantic",
+"genoai-engine-private @ git+https://www.google.com/search?q=https://github.com/salshk/genoai-engine-private.git",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "pre-commit",
-  "twine>=4.0.2",
+"pre-commit",
+"twine>=4.0.2",
 ]
 doc = [
-  "docutils>=0.8,!=0.18.*,!=0.19.*",
-  "ipykernel",
-  "ipython",
-  "myst-nb>=1.1",
-  "pandas",
-  "setuptools",
-  "sphinx>=8.1",
-  "sphinx-book-theme>=1",
-  "sphinx-copybutton",
-  "sphinx-tabs",
-  "sphinxext-opengraph",
-  "sphinx-autoapi",
+"docutils>=0.8,!=0.18.,!=0.19.",
+"ipykernel",
+"ipython",
+"myst-nb>=1.1",
+"pandas",
+"setuptools",
+"sphinx>=8.1",
+"sphinx-book-theme>=1",
+"sphinx-copybutton",
+"sphinx-tabs",
+"sphinxext-opengraph",
+"sphinx-autoapi",
 ]
 test = [
-  "coverage",
-  "pytest",
-  "pytest-asyncio",
+"coverage",
+"pytest",
+"pytest-asyncio",
 ]
 
 [project.urls]
-# CORRECTED: Replaced spaces with hyphens for valid URLs
 Documentation = "https://GenoAI-Pathogenicity-Engine.readthedocs.io/"
 Homepage = "https://github.com/salshk/GenoAI-Pathogenicity-Engine"
 Source = "https://github.com/salshk/GenoAI-Pathogenicity-Engine"
 
-
 [tool.hatch.build.targets.wheel]
 packages = [ "src/genoai_pathogenicity_engine" ]
-
 
 [tool.hatch.envs.default]
 installer = "uv"
@@ -94,40 +91,42 @@ run-cov = "pytest --cov"
 
 [tool.hatch.envs.hatch-test.overrides]
 matrix.deps.env-vars = [
-  { key = "UV_PRERELEASE", value = "allow", if = [ "pre" ] },
+{ key = "UV_PRERELEASE", value = "allow", if = [ "pre" ] },
 ]
 
 [tool.ruff]
 line-length = 120
 src = [ "src" ]
-extend-include = [ "*.ipynb" ]
+extend-include = [ ".ipynb" ]
 format.docstring-code-format = true
 lint.select = [
-  "B", "BLE", "C4", "D", "E", "F", "I",
-  "RUF100", "TID", "UP", "W",
+"B", "BLE", "C4", "D", "E", "F", "I",
+"RUF100", "TID", "UP", "W",
 ]
 lint.ignore = [
-  "B008", "D100", "D104", "D105", "D107",
-  "D203", "D213", "D400", "D401", "E501", "E731", "E741",
+"B008", "D100", "D104", "D105", "D107",
+"D203", "D213", "D400", "D401", "E501", "E731", "E741",
 ]
-lint.per-file-ignores."*/__init__.py" = [ "F401" ]
-lint.per-file-ignores."docs/*" = [ "I" ]
-lint.per-file-ignores."tests/*" = [ "D" ]
+lint.per-file-ignores."/init.py" = [ "F401" ]
+lint.per-file-ignores."docs/" = [ "I" ]
+lint.per-file-ignores."tests/" = [ "D" ]
 lint.pydocstyle.convention = "numpy"
 
 [tool.pytest.ini_options]
 pythonpath = "src"
 testpaths = [ "tests" ]
-python_files = "test_*.py"
-python_functions = "test_*"
+python_files = "test_.py"
+python_functions = "test_"
 xfail_strict = true
 addopts = [
-  "--import-mode=importlib",
+"--import-mode=importlib",
 ]
 
 [tool.coverage.run]
-# CORRECTED: Replaced space with underscore for a valid Python path
 source = [ "src/genoai_pathogenicity_engine" ]
 omit = [
-  "*/tests/test_*.py",
+"/tests/test_.py",
 ]
+
+[tool.hatch.metadata]
+allow-direct-references = true
