@@ -29,6 +29,7 @@ dependencies = [
   "pandas",
   "numpy",
   "pydantic",
+  "genoai-engine-private @ git+https://github.com/salshk/genoai-engine-private.git",
 ]
 
 [project.optional-dependencies]
