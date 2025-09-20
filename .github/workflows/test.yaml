@@ -39,13 +39,22 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          cache: pip # Enable pip caching for faster builds
 
-      - name: Install uv and dependencies
+      - name: Install uv and create venv
         run: |
-          pip install --upgrade pip uv
+          pip install uv
+          uv venv
+      
+      - name: Install dependencies
+        run: |
+          # Use source to activate the venv
+          source .venv/bin/activate
           uv pip install -r requirements.txt
           uv pip install -e .[test]
       
       - name: run tests using pytest
         run: |
+          # Use source to activate the venv
+          source .venv/bin/activate
           pytest
