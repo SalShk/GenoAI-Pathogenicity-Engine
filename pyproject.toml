@@ -29,16 +29,15 @@ dependencies = [
 "pandas",
 "numpy",
 "pydantic",
-"genoai-engine-private @ git+https://www.google.com/search?q=https://github.com/salshk/genoai-engine-private.git",
+"genoai-engine-private @ git+https://github.com/salshk/genoai-engine-private.git",
 ]
-
 [project.optional-dependencies]
 dev = [
 "pre-commit",
 "twine>=4.0.2",
 ]
 doc = [
-"docutils>=0.8,!=0.18.,!=0.19.",
+"docutils>=0.8,!=0.18.*,!=0.19.*",
 "ipykernel",
 "ipython",
 "myst-nb>=1.1",
@@ -56,48 +55,39 @@ test = [
 "pytest",
 "pytest-asyncio",
 ]
-
 [project.urls]
 Documentation = "https://GenoAI-Pathogenicity-Engine.readthedocs.io/"
 Homepage = "https://github.com/salshk/GenoAI-Pathogenicity-Engine"
 Source = "https://github.com/salshk/GenoAI-Pathogenicity-Engine"
-
 [tool.hatch.build.targets.wheel]
 packages = [ "src/genoai_pathogenicity_engine" ]
-
 [tool.hatch.envs.default]
 installer = "uv"
 features = [ "dev" ]
-
 [tool.hatch.envs.docs]
 features = [ "doc" ]
 [tool.hatch.envs.docs.scripts]
 build = "sphinx-build -M html docs docs/_build -W {args}"
 open = "python -m webbrowser -t docs/_build/html/index.html"
 clean = "git clean -fdX -- {args:docs}"
-
 [[tool.hatch.envs.hatch-test.matrix]]
 deps = [ "stable" ]
 python = [ "3.11", "3.13" ]
-
 [[tool.hatch.envs.hatch-test.matrix]]
 deps = [ "pre" ]
 python = [ "3.13" ]
-
 [tool.hatch.envs.hatch-test]
 features = [ "test" ]
 [tool.hatch.envs.hatch-test.scripts]
 run-cov = "pytest --cov"
-
 [tool.hatch.envs.hatch-test.overrides]
 matrix.deps.env-vars = [
 { key = "UV_PRERELEASE", value = "allow", if = [ "pre" ] },
 ]
-
 [tool.ruff]
 line-length = 120
 src = [ "src" ]
-extend-include = [ ".ipynb" ]
+extend-include = [ "*.ipynb" ]
 format.docstring-code-format = true
 lint.select = [
 "B", "BLE", "C4", "D", "E", "F", "I",
@@ -107,26 +97,24 @@ lint.ignore = [
 "B008", "D100", "D104", "D105", "D107",
 "D203", "D213", "D400", "D401", "E501", "E731", "E741",
 ]
-lint.per-file-ignores."/init.py" = [ "F401" ]
-lint.per-file-ignores."docs/" = [ "I" ]
-lint.per-file-ignores."tests/" = [ "D" ]
+lint.per-file-ignores."*/__init__.py" = [ "F401" ]
+lint.per-file-ignores."docs/*" = [ "I" ]
+lint.per-file-ignores."tests/*" = [ "D" ]
 lint.pydocstyle.convention = "numpy"
 
 [tool.pytest.ini_options]
 pythonpath = "src"
 testpaths = [ "tests" ]
-python_files = "test_.py"
-python_functions = "test_"
+python_files = "test_*.py"
+python_functions = "test_*"
 xfail_strict = true
 addopts = [
 "--import-mode=importlib",
 ]
-
 [tool.coverage.run]
 source = [ "src/genoai_pathogenicity_engine" ]
 omit = [
-"/tests/test_.py",
+"*/tests/test_*.py",
 ]
-
 [tool.hatch.metadata]
 allow-direct-references = true
