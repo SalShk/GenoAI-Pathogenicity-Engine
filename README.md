@@ -68,3 +68,22 @@ This guide is for collaborators who have been granted a Personal Access Token (P
 To run the FastAPI web server, ensure your virtual environment is active and run the following command from the root project directory:
 ```bash
 python -m genoai_pathogenicity_engine.main run --transport http --port 8001
+
+## API Example (using cURL)
+ ```bash
+    curl -X POST "[http://127.0.0.1:8001/analyze/](http://127.0.0.1:8001/analyze/)" \
+-H "Content-Type: application/json" \
+-d '[
+  {
+    "variant_id": "chr7-140753336-A-T",
+    "Consequence": "missense_variant",
+    "REVEL": 0.964,
+    "CADD_PHRED": 35.0,
+    "MAX_AF": 0.00002,
+    "...": "..."  
+  }
+]'
+```
+
+## Contributing
+**We welcome contributions and collaborations on the open-source framework. Please [open an issue](https://github.com/salshk/GenoAI-Pathogenicity-Engine/issues) to discuss your ideas.**
