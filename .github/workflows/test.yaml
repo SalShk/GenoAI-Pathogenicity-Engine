@@ -18,11 +18,6 @@ defaults:
     shell: bash -euo pipefail {0}
 
 jobs:
-  # Get the test environment from hatch as defined in pyproject.toml.
-  # This ensures that the pyproject.toml is the single point of truth for test definitions and the same tests are
-  # run locally and on continuous integration.
-  # Check [[tool.hatch.envs.hatch-test.matrix]] in pyproject.toml and https://hatch.pypa.io/latest/environment/ for
-  # more details.
   get-environments:
     runs-on: ubuntu-latest
     outputs:
@@ -39,16 +34,15 @@ jobs:
         run: |
           ENVS_JSON=$(uvx hatch env show --json | jq -c 'to_entries
             | map(
-                select(.key | startswith("hatch-test"))
-                | {
-                    name: .key,
-                    label: (if (.key | contains("pre")) then .key + " (PRE-RELEASE DEPENDENCIES)" else .key end),
-                    python: .value.python
-                  }
+              select(.key | startswith("hatch-test"))
+              | {
+                  name: .key,
+                  label: (if (.key | contains("pre")) then .key + " (PRE-RELEASE DEPENDENCIES)" else .key end),
+                  python: .value.python
+                }
               )')
           echo "envs=${ENVS_JSON}" | tee $GITHUB_OUTPUT
 
-  # Run tests through hatch. Spawns a separate runner for each environment defined in the hatch matrix obtained above.
   test:
     needs: get-environments
 
@@ -71,6 +65,11 @@ jobs:
         with:
           python-version: ${{ matrix.env.python }}
           cache-dependency-glob: pyproject.toml
+      
+      - name: Set up git credentials for private repo
+        run: |
+          git config --global url."https://genoai-api-user:${{ secrets.PRIVATE_REPO_TOKEN }}@github.com".insteadOf "https://github.com"
+      
       - name: create hatch environment
         run: uvx hatch env create ${{ matrix.env.name }}
       - name: run tests using hatch
@@ -84,8 +83,6 @@ jobs:
       - name: Upload coverage
         uses: codecov/codecov-action@v4
 
-  # Check that all tests defined above pass. This makes it easy to set a single "required" test in branch
-  # protection instead of having to update it frequently. See https://github.com/re-actors/alls-green#why.
   check:
     name: Tests pass in all hatch environments
     if: always()
@@ -94,6 +91,6 @@ jobs:
       - test
     runs-on: ubuntu-latest
     steps:
-        - uses: re-actors/alls-green@release/v1
-          with:
-            jobs: ${{ toJSON(needs) }}
+      - uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
